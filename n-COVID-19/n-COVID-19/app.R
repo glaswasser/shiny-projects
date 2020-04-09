@@ -9,6 +9,7 @@ library(tidyverse)
 #install.packages("directlabels")
 library(directlabels)
 library(ggrepel)
+library(plotly)
 
 
 ####### DATA:
@@ -16,7 +17,6 @@ y <- load_nCov2019(lang = 'en', source='github')
 
 # get global data:
 d = y['global']
-
 
 yesterday <- Sys.Date()-1
 
@@ -32,6 +32,9 @@ ui <- fluidPage(
                 animate = animationOptions(interval = 900)),
     
     plotOutput("plot"),
+    
+    plotlyOutput(outputId = "plot",
+                 width = "1000px", height = "750px"),
     
     sliderInput(inputId = "timeplotDate", 
                 label = "Choose End Date of plot:", 
@@ -54,16 +57,14 @@ ui <- fluidPage(
     textOutput("Text")
 )
 
-#input = vector()
-input$sliderNum = "2020-03-27"
 
-input$timeplotDate = "2020-03-27"
 
-#input$timeplotDate <- yesterday
+
+
 
 #DEFINE SERVER:
 server <- function(input, output) {
-    uiOutput(outputId = "sliderNum") #adds a space in the UI for an R object
+    uiOutput(outputId = "sliderNum")
     
     output$Text <- renderText("Source: Tianzhi Wu, Erqiang Hu, Xijin Ge*, Guangchuang Yu*. Open-source analytics tools for studying the COVID-19 coronavirus outbreak. medRxiv, 2020.02.25.20027433. doi: https://doi.org/10.1101/2020.02.25.20027433")
     
@@ -72,25 +73,30 @@ server <- function(input, output) {
         d %>% 
             filter(country != "China") %>% 
             filter(time == as.Date(input$sliderNum, origin = "1899-12-30")) %>% 
-            arrange(desc(cum_confirm)) %>% 
             top_n(n = 10, wt = cum_confirm) %>% 
-            ggplot(aes(x = factor(country), y = cum_confirm))+
-            stat_summary(fun="mean", geom="bar")+
-            ggtitle("Confirmed cases in countries (top 10 outside china)")+
-            ylab("cumulative confirmed cases")+
-            xlab("Country")
-    })#create an output object with the dollar sign. adds element to output list hist
-    
-    
-    
-    output$timeplot <- renderPlot({
-        # save the top countries
-        top <- tibble(d %>% 
-                          filter(country != "China") %>% 
-                          filter(time == as.Date(as.Date(input$timeplotDate), origin = "1899-12-30")) %>% 
-                          top_n(10, cum_confirm)) %>% 
-            pull(country)
+            ggplot(aes(x = reorder(country, cum_confirm), y = cum_confirm, fill = country)) +
+            geom_bar(stat = "identity") +
+            guides(fill = FALSE) +
+            ggtitle("Confirmed cases in countries (top 10 outside china)") +
+            ylab("cumulative confirmed cases") +
+            xlab("Country") +
+            coord_flip()
         
+        ggplotly(exciting, key = "text")
+        
+        })
+    
+
+    
+    
+        output$timeplot <- renderPlot({
+        # save the top countries
+            top <- d %>% 
+                filter(country != "China") %>% 
+                filter(time == as.Date(as.Date(input$timeplotDate), origin = "1899-12-30")) %>% 
+                top_n(10, cum_confirm) %>% 
+            pull(country)
+        # get the maximum confirmed cases
         max <- d %>% 
             filter(country != "China") %>% 
             filter(time == as.Date(as.Date(input$timeplotDate), origin = "1899-12-30")) %>% 
@@ -114,10 +120,10 @@ server <- function(input, output) {
     
     output$deathtimeplot <- renderPlot({
         # save the top countries
-        top <- tibble(d %>% 
-                          filter(country != "China") %>% 
-                          filter(time == as.Date(as.Date(input$deathplotDate), origin = "1899-12-30")) %>% 
-                          top_n(10, cum_dead)) %>% 
+        top <- d %>% 
+            filter(country != "China") %>% 
+            filter(time == as.Date(as.Date(input$deathplotDate), origin = "1899-12-30")) %>% 
+            top_n(10, cum_dead) %>% 
             pull(country)
         
         max <- d %>% 
