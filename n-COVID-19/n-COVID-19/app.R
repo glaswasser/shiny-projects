@@ -25,16 +25,16 @@ yesterday <- Sys.Date()-1
 # Define UI for application
 ui <- fluidPage(
     # INIT SLIDER
+    # idea: with the slider, you can choose the date range
     sliderInput(inputId = "sliderNum", 
                 label = "Choose Date:", 
                 min = as.Date("2020-02-21"), max = as.Date(Sys.Date()-1), 
                 value = as.Date("2019-02-21"),
                 animate = animationOptions(interval = 900)),
     
-    plotOutput("plot"),
+    # create the plot:
     
-    plotlyOutput(outputId = "plot",
-                 width = "1000px", height = "750px"),
+    plotOutput(outputId = "plot"),
     
     sliderInput(inputId = "timeplotDate", 
                 label = "Choose End Date of plot:", 
@@ -51,7 +51,6 @@ ui <- fluidPage(
                 animate = animationOptions(interval = 1200)),
     
     plotOutput("deathtimeplot"),
-    
     
     
     textOutput("Text")
@@ -81,8 +80,6 @@ server <- function(input, output) {
             ylab("cumulative confirmed cases") +
             xlab("Country") +
             coord_flip()
-        
-        ggplotly(exciting, key = "text")
         
         })
     
