@@ -24,6 +24,7 @@ yesterday <- Sys.Date()-1
 
 # Define UI for application
 ui <- fluidPage(
+    
     # INIT SLIDER
     # idea: with the slider, you can choose the date range
     sliderInput(inputId = "sliderNum", 
@@ -52,10 +53,15 @@ ui <- fluidPage(
     
     plotOutput("deathtimeplot"),
     
+    textOutput("Text"),
     
-    textOutput("Text")
+    
+    
+    imageOutput(outputId = "gif")
+    
+    
+    
 )
-
 
 
 
@@ -64,6 +70,16 @@ ui <- fluidPage(
 #DEFINE SERVER:
 server <- function(input, output) {
     uiOutput(outputId = "sliderNum")
+    
+    output$gif <- renderImage( {
+        list(src = "confirmed_cases.gif",
+             contentType = 'image/gif',
+             #width = 1200,
+             #height = 900,
+             alt = "The gif didn't work, but look at the other stuff :)"
+        ) # END LIST
+    }, deleteFile = FALSE
+    ) # END RENDER IMAGE
     
     output$Text <- renderText("Source: Tianzhi Wu, Erqiang Hu, Xijin Ge*, Guangchuang Yu*. Open-source analytics tools for studying the COVID-19 coronavirus outbreak. medRxiv, 2020.02.25.20027433. doi: https://doi.org/10.1101/2020.02.25.20027433")
     
