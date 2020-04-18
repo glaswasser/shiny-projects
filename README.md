@@ -11,7 +11,8 @@ using the nCov2019 package from https://github.com/GuangchuangYu/nCov2019
 
 an extended version of the corona shiny app, with separate files for server, UI and plots, automatic integration of any new file put in the plots folder.
 I learned about this structure in the course of my internship at Oefenweb.
-(currently not available in the web, and also not so much in a "presentable" state)
+
+(The shiny app is currently not available in the web, and also not so much in a "presentable" state)
 
 Parts:
 server.R has all the data parts
