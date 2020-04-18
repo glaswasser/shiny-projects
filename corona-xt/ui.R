@@ -8,6 +8,10 @@
 #
 
 library(shiny)
+library(tidyverse)
+library(nCov2019)
+library(plotly)
+
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(

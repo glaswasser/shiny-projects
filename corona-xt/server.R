@@ -36,7 +36,7 @@ shinyServer(function(input, output, session) {
     
     
     # get data (reactive):
-    ###to do.
+    ###to do or not necessary here.
     
     observeEvent(input$plot_types,
                  ignoreInit = TRUE, {

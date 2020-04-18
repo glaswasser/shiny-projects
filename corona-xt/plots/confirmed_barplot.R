@@ -20,3 +20,5 @@ get_plot <- function(d, input) {
   
   ggplotly(exciting, key = "text")
 }
+
+
