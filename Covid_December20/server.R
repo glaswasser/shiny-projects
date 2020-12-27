@@ -87,7 +87,8 @@ shinyServer(function(input, output, session) {
                                                 input$check2b, input$check2c,
                                                 input$check3a, input$check3b,
                                                 input$check3c),
-                                  relative = input$relative)
+                                  relative_cum = input$relative_cum,
+                                  relative_overtime = input$relative_overtime)
                      }) # end plotly
                  })# END observe event plottype
 

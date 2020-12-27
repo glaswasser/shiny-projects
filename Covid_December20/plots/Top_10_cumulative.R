@@ -14,10 +14,10 @@ get_title <- function() {
 
 
 
-get_plot <- function(df, input, time_range, countries, relative) {
+get_plot <- function(df, input, time_range, countries, relative_cum, relative_overtime) {
   
   
-  if (relative == TRUE) {
+  if (relative_cum == TRUE) {
     df$cases <- df$relative_cases
   }
   # create cumulative cases

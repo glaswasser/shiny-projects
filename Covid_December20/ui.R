@@ -14,36 +14,7 @@ library(shiny)
 
 
 
-
-dropdownButton <- function(label = "", status = c("default", "primary", "success", "info", "warning", "danger"), ..., width = NULL) {
-    
-    status <- match.arg(status)
-    # dropdown button content
-    html_ul <- list(
-        class = "dropdown-menu",
-        style = if (!is.null(width)) 
-            paste0("width: ", validateCssUnit(width), ";"),
-        lapply(X = list(...), FUN = tags$li, style = "margin-left: 10px; margin-right: 10px;")
-    )
-    # dropdown button apparence
-    html_button <- list(
-        class = paste0("btn btn-", status," dropdown-toggle"),
-        type = "button", 
-        `data-toggle` = "dropdown"
-    )
-    html_button <- c(html_button, list(label))
-    html_button <- c(html_button, list(tags$span(class = "caret")))
-    # final result
-    tags$div(
-        class = "dropdown",
-        do.call(tags$button, html_button),
-        do.call(tags$ul, html_ul),
-        tags$script(
-            "$('.dropdown-menu').click(function(e) {
-      e.stopPropagation();
-});")
-    )
-}
+source(file.path("functions", "dropdown_button.R"))
 
 # Define UI for application
 shinyUI(fluidPage(
@@ -64,7 +35,7 @@ shinyUI(fluidPage(
                     animate = animationOptions(interval = 400)
                     ), # END SLIDER
         # checkbox for relative
-        checkboxInput("relative", "Relative Cases per 1000 population", FALSE),
+        checkboxInput("relative_cum", "Relative Cases per 1000 population", FALSE),
         
         
         ), # END CONDITIONAL PANEL CUMULATIVE PLOT
@@ -135,7 +106,7 @@ shinyUI(fluidPage(
             )
           )
         ),# END DROPDOWN BUTTON
-        checkboxInput("relative", "Relative Cases per 1000 population", FALSE),
+        checkboxInput("relative_overtime", "Relative Cases per 1000 population", FALSE),
         ), # END CONDITIONAL PANEL OVER TIME PLOT
 
         # PLOT DESCRIPTION (reactive on plot selected)
@@ -146,8 +117,6 @@ shinyUI(fluidPage(
     
     # Show the generated plot
     mainPanel(
- 
-      
         plotlyOutput(outputId = "plot",
                      width = "1000px", height = "750px"),
 

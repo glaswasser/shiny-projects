@@ -9,15 +9,16 @@ get_description <- function() {
 get_title <- function() {
   return("Daily cases over time. Click on the legend to omit lines")
 }
+options(scipen = 999)
 
-get_plot <- function(df, input, time_range, countries, relative) {
+get_plot <- function(df, input, time_range, countries, relative_cum, relative_overtime) {
   
   # auto-select afghanistan to avoid errors
   if (length(countries) == 0) {
     countries = "Afghanistan"
   }
   # if relative checkbox is checked:
-  if (relative == TRUE) {
+  if (relative_overtime == TRUE) {
     df$cases <- df$relative_cases
   }
   
