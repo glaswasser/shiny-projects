@@ -11,7 +11,7 @@ options(scipen = 999)
 #coronavirus %>% group_by(week = lubridate::week(date)) %>%  summarize(week_cases = mean(cases))
 
 
-get_plot <- function(df, input, time_range, countries, relative_cum, relative_overtime) {
+get_plot <- function(df, input, time_range, countries, relative_cum, relative_overtime, cum_type) {
   
   # auto-select afghanistan to avoid errors
   if (length(countries) == 0) {
@@ -31,8 +31,7 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
   
   # create plot
   over_time_plot <- df %>% 
-    filter(cases > 0,
-           country %in% countries,
+    filter(country %in% countries,
            # filter custom reactive dates:
            between(date, as.Date(time_range[1], origin = "1970-01-01"),
                    as.Date(time_range[2], origin = "1970-01-01"))) %>% 
@@ -40,8 +39,7 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
     geom_line() +
     scale_y_continuous(labels = comma) +
     labs(title = glue("Weekly cases over time for Countries: {glue_collapse(countries, sep = \", \")}"),
-         subtitle = "Click on the legend to omit lines") +
-    theme_classic()
-  
+         subtitle = "Click on the legend to omit lines")
+
   ggplotly(over_time_plot)
 }

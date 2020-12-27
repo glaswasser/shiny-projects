@@ -80,15 +80,23 @@ shinyServer(function(input, output, session) {
                      
                      # Save plot
                      output$plot <- renderPlotly({
-                         get_plot(df = coronavirus, input = input$sliderNum,
+                         get_plot(df = coronavirus,
+                                  # time for single slider
+                                  input = input$sliderNum,
+                                  # time range for slider time range
                                   time_range = input$overTime,
+                                  # countries for checkbox dropdown menu
                                   countries = c(input$check1a, input$check1b,
                                                 input$check1c, input$check2a,
                                                 input$check2b, input$check2c,
                                                 input$check3a, input$check3b,
                                                 input$check3c),
+                                  # relative checkboxes for the plots
                                   relative_cum = input$relative_cum,
-                                  relative_overtime = input$relative_overtime)
+                                  relative_overtime = input$relative_overtime,
+                                  # cumulative plot type:
+                                  cum_type = input$cum_type
+                                  )
                      }) # end plotly
                  })# END observe event plottype
 

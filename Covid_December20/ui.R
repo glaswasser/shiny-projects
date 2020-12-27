@@ -12,9 +12,17 @@ library(coronavirus)
 #update_dataset(silence = TRUE)
 library(shiny)
 
-
-
 source(file.path("functions", "dropdown_button.R"))
+
+# theme for plots
+theme_update(axis.line = element_line(),
+             plot.title = element_text(hjust = 0.5),
+             panel.grid.major = element_line(colour = "gray90"),
+             panel.grid.minor = element_line(colour = "gray90"),
+             panel.grid = element_blank(),
+             panel.background = element_blank(),
+             panel.border = element_blank())
+
 
 # Define UI for application
 shinyUI(fluidPage(
@@ -34,10 +42,18 @@ shinyUI(fluidPage(
                     value = as.Date("2020-02-21"),
                     animate = animationOptions(interval = 400)
                     ), # END SLIDER
+        selectInput(
+            inputId = "cum_type",
+            label = "Choose",
+            choices = c("confirmed", "death", "recovered"),
+            selected = "confirmed",
+            multiple = FALSE,
+            selectize = TRUE,
+            width = NULL,
+            size = NULL
+        ),
         # checkbox for relative
         checkboxInput("relative_cum", "Relative Cases per 1000 population", FALSE),
-        
-        
         ), # END CONDITIONAL PANEL CUMULATIVE PLOT
         
         # START CONDITIONAL PANEL OVER TIME PLOT
@@ -119,9 +135,14 @@ shinyUI(fluidPage(
     mainPanel(
         plotlyOutput(outputId = "plot",
                      width = "1000px", height = "750px"),
-
+        strong("Source:  raw data pulled and arranged by the Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) - using the coronavirus R package, see https://github.com/RamiKrispin/coronavirus - No guarantee for correctness!"),
+        
     )# END MAIN PANEL
     
     
 )# end fluid page
 )# end shinyUI
+
+
+
+# Source - World Population Prospects: The 2019 Revision. http://population.un.org/wpp., \n
