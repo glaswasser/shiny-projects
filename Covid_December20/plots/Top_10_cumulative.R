@@ -8,9 +8,6 @@ get_description <- function() {
 
 options(scipen = 999)
 #input = "2020-12-01"
-get_title <- function() {
-  return("Cumulative cases for top 10 countries")
-}
 
 
 
@@ -38,7 +35,7 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
     # get top 10 countries:
     top_n(10, wt = confirmed) %>% 
     # plot
-    ggplot(aes(x = reorder(country, confirmed), y = confirmed, fill = country, label = population)) +
+    ggplot(aes(x = reorder(country, confirmed), y = confirmed, label = population)) +
     geom_bar(stat = "identity") +
     guides(fill = FALSE) +
     theme(legend.position = "none") +

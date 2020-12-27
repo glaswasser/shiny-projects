@@ -27,7 +27,7 @@ shinyUI(fluidPage(
         
         # get slider for plot conditional on plot type:
         # cumulative plot slider:
-        conditionalPanel(condition = "input.plot_types == 'cumulative_plot'",
+        conditionalPanel(condition = "input.plot_types == 'Top_10_cumulative'",
         sliderInput(inputId = "sliderNum", 
                     label = "Choose Date:", 
                     min = as.Date("2020-02-21"), max = as.Date(Sys.Date()-2), 

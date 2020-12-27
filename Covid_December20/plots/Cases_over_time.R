@@ -3,26 +3,31 @@
 
 # description
 get_description <- function() {
-  return("Daily cases over time. Click on the legend to omit lines")
+  return("Weekly cases over time. For smoothness, sums per week are used instead of single days. Click on the legend to omit lines")
 }
 
-get_title <- function() {
-  return("Daily cases over time. Click on the legend to omit lines")
-}
 options(scipen = 999)
+
+#coronavirus %>% group_by(week = lubridate::week(date)) %>%  summarize(week_cases = mean(cases))
+
 
 get_plot <- function(df, input, time_range, countries, relative_cum, relative_overtime) {
   
   # auto-select afghanistan to avoid errors
   if (length(countries) == 0) {
-    countries = "Afghanistan"
+    countries = "Germany"
   }
   # if relative checkbox is checked:
   if (relative_overtime == TRUE) {
     df$cases <- df$relative_cases
   }
-  
-  
+  # get mean per week because of smoothness
+  df %<>%
+    group_by(date = cut(date, "week"), country, type) %>%
+    summarise(cases = sum(cases),
+              type = type) 
+  # convert date to date format
+  df$date <- as.Date(df$date)
   
   # create plot
   over_time_plot <- df %>% 
@@ -34,8 +39,9 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
     ggplot(aes(x = date, y = cases, colour = type, group = country, linetype = country)) +
     geom_line() +
     scale_y_continuous(labels = comma) +
-    labs(title = glue("Daily cases over time for Countries: {glue_collapse(countries, sep = \", \")}"),
-         subtitle = "Click on the legend to omit lines")
+    labs(title = glue("Weekly cases over time for Countries: {glue_collapse(countries, sep = \", \")}"),
+         subtitle = "Click on the legend to omit lines") +
+    theme_classic()
   
   ggplotly(over_time_plot)
 }
