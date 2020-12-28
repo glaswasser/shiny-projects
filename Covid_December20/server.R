@@ -1,11 +1,5 @@
-#
-# This is the server logic of a Shiny web application. You can run the
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+
+# COVID 19 SHINY APP - ALEXANDER HEINZ
 
 library(shiny)
 library(scales)
@@ -13,24 +7,8 @@ library(plotly)
 library(tidyverse)
 library(coronavirus)
 library(magrittr)
-#update_dataset()
 library(wpp2019)
 library(glue)
-data(pop)
-data("coronavirus")
-# get population info
-pop %<>% select(name, `2020`) %>% rename(population = `2020`)
-# rename americas
-pop$name <- plyr::revalue(pop$name, c("United States of America" = "US"))
-# format population:
-
-pop$population <- pop$population*1000
-
-coronavirus %<>% left_join(pop, by = c("country" = "name"))
-
-
-# create relative cases
-coronavirus %<>% mutate(relative_cases = cases/(population/1000))
 
 
 # create last 24 hours:
@@ -42,9 +20,31 @@ coronavirus %>%
     pivot_wider(names_from = type,
                 values_from = total_cases) %>%
     arrange(-confirmed)
+#update_dataset(silence = TRUE)
 
 
 shinyServer(function(input, output, session) {
+    
+    # DATA PROCESSING...
+    withProgress(message = "Loading Data", value = 0, {
+        setProgress(value = 0.85, message = "Loading population data...")
+        data(pop)
+        setProgress(value = 0.9, message = "Loading covid-19 data...")
+        data("coronavirus")
+        setProgress(value = 0.95, message = "processing covid-19 data...")
+        # get population info
+        pop %<>% select(name, `2020`) %>% rename(population = `2020`)
+        # rename americas
+        pop$name <- plyr::revalue(pop$name, c("United States of America" = "US"))
+        # format population:
+        pop$population <- pop$population*1000
+        coronavirus %<>% left_join(pop, by = c("country" = "name"))
+        # create relative cases
+        coronavirus %<>% mutate(relative_cases = cases/(population/1000))
+        showNotification(paste("Data is Ready!"), type = "message")
+    })
+    # END DATA PROCESSING
+    
     
     ###INPUT SELECTION:
     # Reactive list of available plots
@@ -58,7 +58,7 @@ shinyServer(function(input, output, session) {
         )})
     
     countries <- levels(factor(coronavirus$country))
-    # observe input checkbox for countries:
+    # observe input checkbox for countries (one for every letter category):
     valuesCheck1 <- reactiveValues(x = NULL)
     observeEvent(input$check1a, valuesCheck1$x <- unique(c(valuesCheck1$x, input$check1a)))
     observeEvent(input$check1b, valuesCheck1$x <- unique(c(valuesCheck1$x, input$check1b)))

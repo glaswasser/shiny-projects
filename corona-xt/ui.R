@@ -39,5 +39,6 @@ shinyUI(fluidPage(
     mainPanel(
         plotlyOutput(outputId = "plot",
                      width = "1000px", height = "750px")
-    ))
+    )
+    )
 )

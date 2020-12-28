@@ -29,6 +29,7 @@ shinyServer(function(input, output, session) {
     
     
     #### LOAD DATA ####
+    
     y <- load_nCov2019(lang = 'en', source='github')
     
     # get global data:

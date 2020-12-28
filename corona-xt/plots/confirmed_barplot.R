@@ -14,7 +14,7 @@ get_plot <- function(d, input) {
     geom_bar(stat = "identity") +
     guides(fill = FALSE) +
     ggtitle("Confirmed cases in countries (top 10 outside china)") +
-    ylab("cumulative confirmed cases") +
+    ylab("Cumulative confirmed cases") +
     xlab("Country") +
     coord_flip()
   

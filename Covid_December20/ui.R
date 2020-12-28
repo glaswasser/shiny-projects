@@ -1,11 +1,6 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+# COVID 19 SHINY APP - ALEXANDER HEINZ
+
+
 library(plotly)
 library(tidyverse)
 library(coronavirus)
@@ -58,12 +53,8 @@ shinyUI(fluidPage(
         
         # START CONDITIONAL PANEL OVER TIME PLOT
         # cases over time slider:
-        conditionalPanel(condition = "input.plot_types == 'Cases_over_time'",
-                         sliderInput(inputId = "overTime", 
-                                     label = "Choose Date Range:", 
-                                     min = as.Date("2020-02-21"), max = as.Date(Sys.Date()-2), 
-                                     value = c(as.Date("2020-02-21"), as.Date(Sys.Date()-2))
-        ), # END SLIDER INPUT
+        conditionalPanel(condition = "input.plot_types == 'Cases_over_time' || input.plot_types == 'Distribution_over_time'",
+
         strong("Choose Countries:"),
         # DROPDOWN MENU: 1
         dropdownButton(
@@ -122,9 +113,20 @@ shinyUI(fluidPage(
             )
           )
         ),# END DROPDOWN BUTTON
+        
+        conditionalPanel(condition = "input.plot_types == 'Cases_over_time'",
+                         
+        sliderInput(inputId = "overTime", 
+                    label = "Choose Date Range:", 
+                    min = as.Date("2020-02-21"), max = as.Date(Sys.Date()-2), 
+                    value = c(as.Date("2020-02-21"), as.Date(Sys.Date()-2))
+        ), # END SLIDER INPUT
         checkboxInput("relative_overtime", "Relative Cases per 1000 population", FALSE),
-        ), # END CONDITIONAL PANEL OVER TIME PLOT
-
+        ) # END CONDITIONAL PANEL OVER TIME PLOT
+        ), # END CONDITIONAL PANEL BOTH OVER TIME PLOTS
+        
+        
+        
         # PLOT DESCRIPTION (reactive on plot selected)
         strong("Plot description:"),
         textOutput(outputId = "plot_description")

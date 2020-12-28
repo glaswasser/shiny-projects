@@ -3,7 +3,8 @@
 
 # description
 get_description <- function() {
-  return("Weekly cases over time. For smoothness, sums per week are used instead of single days. Click on the legend to omit lines")
+  return("Weekly new cases over time. For smoothness, sums per week are used instead of single days.
+         Click on the legend to omit lines. Double click in the legend to isolate lines.")
 }
 
 options(scipen = 999)
@@ -38,7 +39,7 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
     ggplot(aes(x = date, y = cases, colour = type, group = country, linetype = country)) +
     geom_line() +
     scale_y_continuous(labels = comma) +
-    labs(title = glue("Weekly cases over time for Countries: {glue_collapse(countries, sep = \", \")}"),
+    labs(title = glue("Weekly new cases over time for Countries: {glue_collapse(countries, sep = \", \")}"),
          subtitle = "Click on the legend to omit lines")
 
   ggplotly(over_time_plot)

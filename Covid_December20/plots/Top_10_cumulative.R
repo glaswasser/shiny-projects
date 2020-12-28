@@ -1,32 +1,12 @@
 
 # description
 get_description <- function() {
-  return("Cumulative cases for top 10 countries")
+  return("\"Top 10\" countries in terms of Cumulative cases over time")
 }
 
 
 
 options(scipen = 999)
-#input = "2020-12-01"
-
-
-#coronavirus %>% filter(type == "confirmed") %>%
-  #select(-province, -lat, -long) %>% 
-#  filter(country == "China")
-
-  
-
-#coronavirus %>% filter(type == "confirmed",
-#                       province != "") %>%
- ## select(-province, -lat, -long) %>% 
-#  group_by(country) %>%
-#  mutate(confirmed = cumsum(cases)) %>% 
-#  ungroup() %>% 
-#  filter(date == as.Date("2020-03-15", origin = "1970-01-01")) %>% 
-#  group_by(country) %>% 
-#  top_n(1, wt = confirmed) %>% 
-#  unique() %>% 
-#  top_n(10, wt = confirmed)
 
 
 get_plot <- function(df, input, time_range, countries, relative_cum, relative_overtime, cum_type) {
@@ -38,9 +18,10 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
   # create cumulative cases
   df <- df %>% 
     filter(type == cum_type) %>%
-    select(-province, -lat, -long) %>% 
-    #select(date, country, cases) %>% 
+    #select(-province, -lat, -long) %>% 
+    select(date, country, cases, type, population) %>% 
     group_by(country) %>%
+    arrange(date) %>% 
     mutate(confirmed = cumsum(cases)) %>% 
     ungroup() 
 
@@ -48,12 +29,15 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
   conf_plot <- df %>% 
     filter(date == as.Date(input, origin = "1970-01-01")) %>% 
     # remove provinces and get only top value per country:
+    select(-cases) %>% 
     group_by(country) %>% 
     top_n(1, wt = confirmed) %>% 
     unique() %>% 
     ungroup() %>% 
     # get top 10 countries:
     top_n(10, wt = confirmed) %>% 
+    # remove duplicates
+    unique() %>% 
     # plot
     ggplot(aes(x = reorder(country, confirmed), y = confirmed, label = population)) +
     geom_bar(stat = "identity") +
