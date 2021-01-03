@@ -12,14 +12,14 @@ library(glue)
 
 
 # create last 24 hours:
-coronavirus %>% 
-    filter(date == max(date)) %>%
-    select(country, type, cases) %>%
-    group_by(country, type) %>%
-    summarise(total_cases = sum(cases)) %>%
-    pivot_wider(names_from = type,
-                values_from = total_cases) %>%
-    arrange(-confirmed)
+#coronavirus %>% 
+ #   filter(date == max(date)) %>%
+  #  select(country, type, cases) %>%
+   # group_by(country, type) %>%
+    #summarise(total_cases = sum(cases)) %>%
+#    pivot_wider(names_from = type,
+ #               values_from = total_cases) %>%
+  #  arrange(-confirmed)
 #update_dataset(silence = TRUE)
 
 
@@ -27,10 +27,15 @@ shinyServer(function(input, output, session) {
     
     # DATA PROCESSING...
     withProgress(message = "Loading Data", value = 0, {
+      setProgress(value = 0.70, message = "updating data, this may take a little while...")
+        #update_dataset(silence = TRUE)
+        
         setProgress(value = 0.85, message = "Loading population data...")
         data(pop)
+        
         setProgress(value = 0.9, message = "Loading covid-19 data...")
         data("coronavirus")
+        
         setProgress(value = 0.95, message = "processing covid-19 data...")
         # get population info
         pop %<>% select(name, `2020`) %>% rename(population = `2020`)
@@ -41,6 +46,13 @@ shinyServer(function(input, output, session) {
         coronavirus %<>% left_join(pop, by = c("country" = "name"))
         # create relative cases
         coronavirus %<>% mutate(relative_cases = cases/(population/1000))
+        # fix buggy recovery cases for US: ????
+       # coronavirus$cases[coronavirus$date == "2020-12-14" &
+    #                          coronavirus$country == "US" &
+     #                         coronavirus$type == "recovered"] <- coronavirus$cases[coronavirus$date == "2020-12-14" &
+      #                                                                                  coronavirus$country == "US" &
+       #                                                                                 coronavirus$type == "recovered"]*-1
+        
         showNotification(paste("Data is Ready!"), type = "message")
     })
     # END DATA PROCESSING

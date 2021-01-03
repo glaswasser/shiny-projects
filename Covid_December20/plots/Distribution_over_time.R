@@ -1,7 +1,4 @@
 get_description <- function() {
-  if (countries == unique(df$country)){
-    countries = "Worldwide"
-  }
   return(glue("Covid 19 Cases - evolution over time in selected countries. If no country is selected,
               worldwide cases are used."))
 }
@@ -43,6 +40,4 @@ df %>%
          xaxis = list(title = "Source: Johns Hopkins University Center for Systems Science and Engineering"))
 }
 
-
-all(countries == unique(df$country))
 

@@ -33,6 +33,7 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
   # create plot
   over_time_plot <- df %>% 
     filter(country %in% countries,
+           cases > 0,
            # filter custom reactive dates:
            between(date, as.Date(time_range[1], origin = "1970-01-01"),
                    as.Date(time_range[2], origin = "1970-01-01"))) %>% 
@@ -40,7 +41,8 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
     geom_line() +
     scale_y_continuous(labels = comma) +
     labs(title = glue("Weekly new cases over time for Countries: {glue_collapse(countries, sep = \", \")}"),
-         subtitle = "Click on the legend to omit lines")
+         subtitle = "Click on the legend to omit lines") 
 
   ggplotly(over_time_plot)
 }
+

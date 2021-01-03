@@ -5,7 +5,6 @@ get_description <- function() {
 }
 
 
-
 options(scipen = 999)
 
 
@@ -25,7 +24,7 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
     mutate(confirmed = cumsum(cases)) %>% 
     ungroup() 
 
-
+  
   conf_plot <- df %>% 
     filter(date == as.Date(input, origin = "1970-01-01")) %>% 
     # remove provinces and get only top value per country:
@@ -36,6 +35,7 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
     ungroup() %>% 
     # get top 10 countries:
     top_n(10, wt = confirmed) %>% 
+    head(10) %>% 
     # remove duplicates
     unique() %>% 
     # plot
@@ -43,9 +43,9 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
     geom_bar(stat = "identity") +
     guides(fill = FALSE) +
     theme(legend.position = "none") +
-    labs(title = "Cumulative Confirmed Cases",
+    labs(title = glue::glue("Cumulative {cum_type} cases"),
          subtitle = "Top 10 Countries") +
-    ylab(glue::glue("cumulative confirmed cases on ", {format(as.Date(input, origin = "1970-01-01"), "%Y-%b-%d")})) +
+    ylab(glue::glue("cumulative {cum_type} cases on ", {format(as.Date(input, origin = "1970-01-01"), "%Y-%b-%d")})) +
     xlab("Country") +
     coord_flip() +
     scale_y_continuous(labels = comma)

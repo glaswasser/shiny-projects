@@ -4,9 +4,9 @@
 library(plotly)
 library(tidyverse)
 library(coronavirus)
-#update_dataset(silence = TRUE)
 library(shiny)
 
+# get dropdown button function
 source(file.path("functions", "dropdown_button.R"))
 
 # theme for plots
@@ -48,7 +48,9 @@ shinyUI(fluidPage(
             size = NULL
         ),
         # checkbox for relative
-        checkboxInput("relative_cum", "Relative Cases per 1000 population", FALSE),
+        checkboxInput("relative_cum", "Relative Cases per 1000 population", FALSE)
+        
+        
         ), # END CONDITIONAL PANEL CUMULATIVE PLOT
         
         # START CONDITIONAL PANEL OVER TIME PLOT
@@ -135,8 +137,8 @@ shinyUI(fluidPage(
     
     # Show the generated plot
     mainPanel(
-        plotlyOutput(outputId = "plot",
-                     width = "1000px", height = "750px"),
+        plotlyOutput(outputId = "plot", width = "100%"),
+                     #width = "1000px", height = "750px"),
         strong("Source:  raw data pulled and arranged by the Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) - using the coronavirus R package, see https://github.com/RamiKrispin/coronavirus - No guarantee for correctness!"),
         
     )# END MAIN PANEL
