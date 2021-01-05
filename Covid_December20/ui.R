@@ -53,6 +53,17 @@ shinyUI(fluidPage(
         
         ), # END CONDITIONAL PANEL CUMULATIVE PLOT
         
+
+        # START CONDITIONAL PANEL WORDCLOUD
+        conditionalPanel(condition = "input.plot_types == 'Wordcloud'",
+                         sliderInput(inputId = "wordcloud_slider", 
+                                     label = "Choose Date:", 
+                                     min = Sys.Date() - months(1) + weeks(1), max = as.Date(Sys.Date()-2), 
+                                     value = Sys.Date(),
+                                     animate = animationOptions(interval = 800)
+                         ), # END SLIDER
+        ), # END CONDITIONAL PANEL WORDCLOUD
+        
         # START CONDITIONAL PANEL OVER TIME PLOT
         # cases over time slider:
         conditionalPanel(condition = "input.plot_types == 'Cases_over_time' || input.plot_types == 'Distribution_over_time'",
@@ -137,10 +148,16 @@ shinyUI(fluidPage(
     
     # Show the generated plot
     mainPanel(
-        plotlyOutput(outputId = "plot", width = "100%"),
+        conditionalPanel(condition = "input.plot_types != 'Wordcloud'",
+                         plotlyOutput(outputId = "plot", width = "100%"),
                      #width = "1000px", height = "750px"),
         strong("Source:  raw data pulled and arranged by the Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) - using the coronavirus R package, see https://github.com/RamiKrispin/coronavirus - No guarantee for correctness!"),
-        
+        ), # end cond. on not word cloud
+        conditionalPanel(condition = "input.plot_types == 'Wordcloud'",
+                         wordcloud2Output("wordcloud"),
+            strong("Source: Raw data ulled using the package \"newsanchor\", which connects to https://newsapi.org - huge thanks to the authors for the free usage options!"),
+        ),
+                         
     )# END MAIN PANEL
     
     

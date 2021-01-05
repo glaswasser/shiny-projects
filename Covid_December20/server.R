@@ -9,6 +9,8 @@ library(coronavirus)
 library(magrittr)
 library(wpp2019)
 library(glue)
+library(wordcloud2)
+
 
 
 # create last 24 hours:
@@ -27,8 +29,8 @@ shinyServer(function(input, output, session) {
     
     # DATA PROCESSING...
     withProgress(message = "Loading Data", value = 0, {
-      setProgress(value = 0.70, message = "updating data, this may take a little while...")
-        #update_dataset(silence = TRUE)
+      setProgress(value = 0.70, message = "updating data, this may take up to a minute...")
+        update_dataset(silence = TRUE)
         
         setProgress(value = 0.85, message = "Loading population data...")
         data(pop)
@@ -110,6 +112,9 @@ shinyServer(function(input, output, session) {
                                   cum_type = input$cum_type
                                   )
                      }) # end plotly
+                     # for wordcloud:
+                     output$wordcloud <- renderWordcloud2(get_wordcloud(df = coronavirus,
+                                                wordcloud_slider = input$wordcloud_slider))
                  })# END observe event plottype
 
 })
