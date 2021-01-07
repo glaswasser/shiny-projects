@@ -4,7 +4,9 @@
 library(plotly)
 library(tidyverse)
 library(coronavirus)
+library(lubridate)
 library(shiny)
+library(wordcloud2)
 
 # get dropdown button function
 source(file.path("functions", "dropdown_button.R"))
@@ -59,7 +61,7 @@ shinyUI(fluidPage(
                          sliderInput(inputId = "wordcloud_slider", 
                                      label = "Choose Date:", 
                                      min = Sys.Date() - months(1) + weeks(1), max = as.Date(Sys.Date()-2), 
-                                     value = Sys.Date(),
+                                     value = Sys.Date()-2,
                                      animate = animationOptions(interval = 800)
                          ), # END SLIDER
         ), # END CONDITIONAL PANEL WORDCLOUD
