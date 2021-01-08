@@ -134,8 +134,8 @@ shinyUI(fluidPage(
                          
         sliderInput(inputId = "overTime", 
                     label = "Choose Date Range:", 
-                    min = as.Date("2020-02-21"), max = as.Date(Sys.Date()-6), 
-                    value = c(as.Date("2020-02-21"), as.Date(Sys.Date()-6))
+                    min = as.Date("2020-02-21"), max = as.Date(Sys.Date()-2), 
+                    value = c(as.Date("2020-02-21"), as.Date(Sys.Date()-2))
         ), # END SLIDER INPUT
         checkboxInput("relative_overtime", "Relative Cases per 1000 population", FALSE),
         ) # END CONDITIONAL PANEL OVER TIME PLOT

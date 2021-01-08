@@ -5,8 +5,8 @@ account: glaswasser
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3431321
-bundleId: 4069930
+bundleId: 4072250
 url: https://glaswasser.shinyapps.io/Covid19/
-when: 1610054908.30276
+when: 1610109778.83541
 asMultiple: FALSE
 asStatic: FALSE

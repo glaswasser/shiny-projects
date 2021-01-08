@@ -30,7 +30,7 @@ library(stopwords)
 
 shinyServer(function(input, output, session) {
   
-  output$note <- renderText("Note: This app is designed to give an overview over time, for the most up-to-date data please use other sources")
+  output$note <- renderText("Note: This app is designed to give a rough overview over time, for the most up-to-date or regional data please use other sources")
   
   
   # DATA PROCESSING...

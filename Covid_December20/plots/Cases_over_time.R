@@ -3,7 +3,7 @@
 
 # description
 get_description <- function() {
-  return("Weekly new cases over time. For smoothness, sums per week are used instead of single days.
+  return("Weekly new cases over time. For smoothness, sums over the last 7 days are used instead of single days.
          Click on the legend to omit lines. Double click in the legend to isolate lines.")
 }
 
@@ -43,12 +43,20 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
            # filter custom reactive dates:
            between(date, as.Date(time_range[1], origin = "1970-01-01"),
                    as.Date(time_range[2], origin = "1970-01-01"))) %>% 
-    ggplot(aes(x = date, y = seven_days_case_sum, colour = type, group = country, linetype = country, label = date_range)) +
+    ggplot(aes(x = date, y = seven_days_case_sum, colour = type, group = country, linetype = country, label = date_range,
+               text = paste(" Country: ", country, "\n",
+                            "Date: ", date, "\n",
+                            "Type of cases: ", type, "\n",
+                            "Cases over 7 days: ", seven_days_case_sum, "\n",
+                            "Date range: ", date_range
+               ))) +
     geom_line() +
     scale_y_continuous(labels = comma) +
     labs(title = glue("Weekly new cases over time for Countries: {glue_collapse(countries, sep = \", \")}"),
          subtitle = "Click on the legend to omit lines") 
 
-  ggplotly(over_time_plot, tooltip = c("colour", "group", "x", "label", "y"))
+  ggplotly(over_time_plot, tooltip = "text")
+  
+  #ggplotly(over_time_plot, tooltip = c("colour", "group", "x", "label", "y"))
 }
 
