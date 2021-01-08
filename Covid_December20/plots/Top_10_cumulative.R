@@ -24,7 +24,7 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
     mutate(confirmed = cumsum(cases)) %>% 
     ungroup() 
 
-  
+
   conf_plot <- df %>% 
     filter(date == as.Date(input, origin = "1970-01-01")) %>% 
     # remove provinces and get only top value per country:

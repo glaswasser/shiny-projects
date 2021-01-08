@@ -30,6 +30,9 @@ library(stopwords)
 
 shinyServer(function(input, output, session) {
   
+  output$note <- renderText("Note: This app is designed to give an overview over time, for the most up-to-date data please use other sources")
+  
+  
   # DATA PROCESSING...
   withProgress(message = "Loading Data", value = 0, {
     setProgress(value = 0.70, message = "updating data, this may take up to a minute...")
@@ -58,7 +61,7 @@ shinyServer(function(input, output, session) {
     #                                                                                  coronavirus$country == "US" &
     #                                                                                 coronavirus$type == "recovered"]*-1
     
-    showNotification(paste("Data is Ready!"), type = "message")
+    showNotification(paste("Data is Ready! Please wait a little while until the plots show up!"), type = "message")
   })
   # END DATA PROCESSING
   
@@ -87,8 +90,8 @@ shinyServer(function(input, output, session) {
   observeEvent(input$check3b, valuesCheck1$x <- unique(c(valuesCheck1$x, input$check3b)))
   observeEvent(input$check3c, valuesCheck1$x <- unique(c(valuesCheck1$x, input$check3c)))
   
-  ### start test:
-  # reactive on
+ 
+  # reactive on the wordcloud slider, get the newspaper results of the week before
   for_wordcloud <- reactiveValues(x = NULL)
   observeEvent(input$wordcloud_slider, {
     # set largest possible from and to date back in the days:
@@ -102,12 +105,12 @@ shinyServer(function(input, output, session) {
                                   sources = c("fox-news", "google-news", "daily-mail", "time", "independent",
                                               "the-new-york-times", "the-wall-street-journal", "the-washington-post",
                                               "usa-today"))[[2]]
+
+        
     for_wordcloud$stopwords <- stopwords("en", source = "snowball")
   })
   
-  
-  #### end test
-  
+
   # reactive on plot types, create plots:
   observeEvent(input$plot_types,
                ignoreInit = TRUE, {

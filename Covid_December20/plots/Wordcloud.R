@@ -2,7 +2,8 @@
 ## GOAL: Get word clouds from a set range of dates 
 get_description <- function() {
   return(glue("
-  Get the most frequent words in newspaper articles related to the Coronavirus in the week before the chosen date.
+  Get the most frequent words in newspaper articles related to the Coronavirus in the week before the chosen date. 
+  Limited to the last month because of the free usage options of the R-package.
          Will be pulled from the following newspapers: \n Fox News, Google News, Daily Mail, Time, Independent,
          New York Times, Wall Street Journal, Washington Post, USA Today
               "))

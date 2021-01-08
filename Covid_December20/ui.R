@@ -23,9 +23,10 @@ theme_update(axis.line = element_line(),
 
 # Define UI for application
 shinyUI(fluidPage(
-
+    textOutput(outputId = "note"),
     
     sidebarPanel(
+        
         selectInput("plot_types", "Plot Type",
                     choices = "",
                     selected = ""),
@@ -133,14 +134,14 @@ shinyUI(fluidPage(
                          
         sliderInput(inputId = "overTime", 
                     label = "Choose Date Range:", 
-                    min = as.Date("2020-02-21"), max = as.Date(Sys.Date()-2), 
-                    value = c(as.Date("2020-02-21"), as.Date(Sys.Date()-2))
+                    min = as.Date("2020-02-21"), max = as.Date(Sys.Date()-6), 
+                    value = c(as.Date("2020-02-21"), as.Date(Sys.Date()-6))
         ), # END SLIDER INPUT
         checkboxInput("relative_overtime", "Relative Cases per 1000 population", FALSE),
         ) # END CONDITIONAL PANEL OVER TIME PLOT
         ), # END CONDITIONAL PANEL BOTH OVER TIME PLOTS
         
-        
+
         
         # PLOT DESCRIPTION (reactive on plot selected)
         strong("Plot description:"),

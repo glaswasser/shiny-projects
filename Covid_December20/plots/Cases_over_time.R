@@ -14,18 +14,6 @@ options(scipen = 999)
 #countries = "Germany"
 #time_range = c("2021-01-01", "2021-01-03")
 
-#coronavirus %>% 
-#  filter(country %in% countries,
-#         cases > 0,
-#         # filter custom reactive dates:
-#         between(date, as.Date(time_range[1], origin = "1970-01-01"),
-#                 as.Date(time_range[2], origin = "1970-01-01"))) %>% 
-#  ggplot(aes(x = date, y = cases, colour = type, group = country, linetype = country)) +
-#  geom_line() +
-#  scale_y_continuous(labels = comma) +
-#  labs(title = glue("Weekly new cases over time for Countries: {glue_collapse(countries, sep = \", \")}"),
-#       subtitle = "Click on the legend to omit lines") 
-
 
 get_plot <- function(df, input, time_range, countries, relative_cum, relative_overtime, cum_type) {
   
@@ -37,14 +25,14 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
   if (relative_overtime == TRUE) {
     df$cases <- df$relative_cases
   }
-  # get mean per week because of smoothness
-  df %<>%
-    group_by(date = cut(date, "week"), country, type) %>%
-    summarise(cases = sum(cases),
-              type = type) 
-  # convert date to date format
-  df$date <- as.Date(df$date)
   
+  # create seven days case sum and date range
+  df %<>% 
+    group_by(country, type) %>% 
+    mutate(seven_days_case_sum =  reduce(map(0:6, ~ lag(cases, ., 0)), `+`), # see https://stackoverflow.com/questions/47463429/r-group-lag-sum
+           date_range = paste(lag(date, 6, default = min(date)),"-", date))
+    
+    
   df$type <- factor(df$type, levels = c("death", "recovered", "confirmed"))
   
   
@@ -55,12 +43,12 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
            # filter custom reactive dates:
            between(date, as.Date(time_range[1], origin = "1970-01-01"),
                    as.Date(time_range[2], origin = "1970-01-01"))) %>% 
-    ggplot(aes(x = date, y = cases, colour = type, group = country, linetype = country)) +
+    ggplot(aes(x = date, y = seven_days_case_sum, colour = type, group = country, linetype = country, label = date_range)) +
     geom_line() +
     scale_y_continuous(labels = comma) +
     labs(title = glue("Weekly new cases over time for Countries: {glue_collapse(countries, sep = \", \")}"),
          subtitle = "Click on the legend to omit lines") 
 
-  ggplotly(over_time_plot)
+  ggplotly(over_time_plot, tooltip = c("colour", "group", "x", "label", "y"))
 }
 
