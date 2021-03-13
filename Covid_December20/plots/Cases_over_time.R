@@ -51,8 +51,9 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
                             "Date range: ", date_range
                ))) +
     geom_line() +
+    ylab("cases") +
     scale_y_continuous(labels = comma) +
-    labs(title = glue("Weekly new cases over time for Countries: {glue_collapse(countries, sep = \", \")}"),
+    labs(title = glue("Seven day incidence over time for Countries: {glue_collapse(countries, sep = \", \")}"),
          subtitle = "Click on the legend to omit lines") 
 
   ggplotly(over_time_plot, tooltip = "text")

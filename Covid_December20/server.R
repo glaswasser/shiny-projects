@@ -35,14 +35,16 @@ shinyServer(function(input, output, session) {
   
   # DATA PROCESSING...
   withProgress(message = "Loading Data", value = 0, {
-    setProgress(value = 0.70, message = "updating data, this may take up to a minute...")
+    setProgress(value = 0.70, message = "updating data, this may take some seconds...")
     #update_dataset(silence = TRUE)
-    
+    coronavirus <- read.csv("https://raw.githubusercontent.com/RamiKrispin/coronavirus/master/csv/coronavirus.csv", stringsAsFactors = FALSE)
+
+    coronavirus$date = as.Date(coronavirus$date, origin = "1970-01-01")
     setProgress(value = 0.85, message = "Loading population data...")
     data(pop)
     
     setProgress(value = 0.9, message = "Loading covid-19 data...")
-    data("coronavirus")
+    #data("coronavirus")
     
     setProgress(value = 0.95, message = "processing covid-19 data...")
     # get population info
