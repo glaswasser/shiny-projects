@@ -23,6 +23,8 @@ theme_update(axis.line = element_line(),
 
 # Define UI for application
 shinyUI(fluidPage(
+    HTML('<meta name="viewport" content="width=1024">'),
+    
     textOutput(outputId = "note"),
     
     sidebarPanel(
@@ -51,7 +53,7 @@ shinyUI(fluidPage(
             size = NULL
         ),
         # checkbox for relative
-        checkboxInput("relative_cum", "Relative Cases per 1000 population", FALSE)
+        checkboxInput("relative_cum", "Relative Cases per 100,000 population", FALSE)
         
         
         ), # END CONDITIONAL PANEL CUMULATIVE PLOT
@@ -106,7 +108,7 @@ shinyUI(fluidPage(
             ),
             column(
               width = 4,
-              checkboxGroupInput(inputId = "check2c", label = NULL, choices = levels(factor(coronavirus$country))[110:130])
+              checkboxGroupInput(inputId = "check2c", label = NULL, choices = levels(factor(coronavirus$country))[110:131])
             )
           )
         ),# END DROPDOWN BUTTON
@@ -117,7 +119,7 @@ shinyUI(fluidPage(
           fluidRow(
             column(
               width = 4,
-              checkboxGroupInput(inputId = "check3a", label = NULL, choices = levels(factor(coronavirus$country))[131:149])
+              checkboxGroupInput(inputId = "check3a", label = NULL, choices = levels(factor(coronavirus$country))[132:149])
             ),
             column(
               width = 4,
@@ -134,10 +136,10 @@ shinyUI(fluidPage(
                          
         sliderInput(inputId = "overTime", 
                     label = "Choose Date Range:", 
-                    min = as.Date("2020-02-21"), max = as.Date(Sys.Date()-2), 
-                    value = c(as.Date("2020-02-21"), as.Date(Sys.Date()-2))
+                    min = as.Date("2020-02-21"), max = as.Date(Sys.Date()-1), 
+                    value = c(as.Date("2020-02-21"), as.Date(Sys.Date()-1))
         ), # END SLIDER INPUT
-        checkboxInput("relative_overtime", "Relative Cases per 1000 population", FALSE),
+        checkboxInput("relative_overtime", "Relative Cases per 100,000 population (7 day incidence)", FALSE),
         ) # END CONDITIONAL PANEL OVER TIME PLOT
         ), # END CONDITIONAL PANEL BOTH OVER TIME PLOTS
         

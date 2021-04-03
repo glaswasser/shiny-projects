@@ -55,7 +55,7 @@ shinyServer(function(input, output, session) {
     pop$population <- pop$population*1000
     coronavirus %<>% left_join(pop, by = c("country" = "name"))
     # create relative cases
-    coronavirus %<>% mutate(relative_cases = cases/(population/1000))
+    coronavirus %<>% mutate(relative_cases = cases/(population/100000))
     # fix buggy recovery cases for US: ????
     # coronavirus$cases[coronavirus$date == "2020-12-14" &
     #                          coronavirus$country == "US" &

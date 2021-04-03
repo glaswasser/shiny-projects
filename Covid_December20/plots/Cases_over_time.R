@@ -9,10 +9,6 @@ get_description <- function() {
 
 options(scipen = 999)
 
-#coronavirus %>% group_by(week = lubridate::week(date)) %>%  summarize(week_cases = mean(cases))
-
-#countries = "Germany"
-#time_range = c("2021-01-01", "2021-01-03")
 
 
 get_plot <- function(df, input, time_range, countries, relative_cum, relative_overtime, cum_type) {
@@ -53,7 +49,7 @@ get_plot <- function(df, input, time_range, countries, relative_cum, relative_ov
     geom_line() +
     ylab("cases") +
     scale_y_continuous(labels = comma) +
-    labs(title = glue("Seven day incidence over time for Countries: {glue_collapse(countries, sep = \", \")}"),
+    labs(title = glue("Cases over time for Countries: {glue_collapse(countries, sep = \", \")}"),
          subtitle = "Click on the legend to omit lines") 
 
   ggplotly(over_time_plot, tooltip = "text")
